@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+    <catalog_product_view>
+        <reference name="head">
+            <action method="addItem"><type>js_css</type><name>fileupload/css/style.css</name><params/></action>
+            <action method="addItem"><type>js_css</type><name>fileupload/css/jquery.fileupload.css</name><params/></action>
+            <action method="addItem"><type>js_css</type><name>fileupload/css/bootstrap.min.css</name><params/></action>
+            
+            <action method="addItem"><type>js</type><name>fileupload/js/vendor/jquery.ui.widget.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/tmpl.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/load-image.all.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/canvas-to-blob.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/bootstrap.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.blueimp-gallery.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.iframe-transport.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-process.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-image.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-audio.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-validate.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-ui.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/main.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/cors/jquery.xdr-transport.js</name><params/></action>
+            
+            <!--action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-jquery-ui.js</name><params/></action-->
+        </reference>
+        <reference name="product.info.options">
+            <action method="addOptionRenderer"><type>printed</type><block>brocustomoption/catalog_product_view_options_type_default</block><template>brosolutions/custom_options/type/default.phtml</template></action>
+            <action method="addOptionRenderer" ifconfig="magekart_catalog/customoptions/enabled"><type>text</type><block>catalog/product_view_options_type_text</block><template>customoptions/catalog-product-view-options-type-text.phtml</template></action>
+            <action method="addOptionRenderer" ifconfig="magekart_catalog/customoptions/enabled"><type>file</type><block>catalog/product_view_options_type_file</block><template>customoptions/catalog-product-view-options-type-file.phtml</template></action>
+            <action method="addOptionRenderer" ifconfig="magekart_catalog/customoptions/enabled"><type>select</type><block>catalog/product_view_options_type_select</block><template>customoptions/catalog-product-view-options-type-select.phtml</template></action>
+            <action method="addOptionRenderer" ifconfig="magekart_catalog/customoptions/enabled"><type>date</type><block>catalog/product_view_options_type_date</block><template>customoptions/catalog-product-view-options-type-date.phtml</template></action>
+            <action method="addOptionRenderer" ifconfig="magekart_catalog/customoptions/enabled"><type>default</type><block>catalog/product_view_options_type_default</block><template>customoptions/catalog-product-view-options-type-default.phtml</template></action>
+            <action method="setTemplate"><template>customoptions/catalog-product-view-options.phtml</template></action>
+        </reference>
+    </catalog_product_view>
+    
+    <ajax_index_options>
+    	<reference name="product.info.options">
+            <action method="addOptionRenderer"><type>quantity_breaks</type><block>catalog/product_view_options_type_select</block><template>brosolutions/custom_options/type/default.phtml</template></action>
+            <action method="setTemplate" ifconfig="magekart_catalog/customoptions/enabled"><template>customoptions/catalog-product-view-options.phtml</template></action>
+        </reference>    	
+    </ajax_index_options>
+    
+    <printx_upload_index>
+        <reference name="head">
+            <action method="addItem"><type>js_css</type><name>fileupload/css/style.css</name><params/></action>
+            <action method="addItem"><type>js_css</type><name>fileupload/css/jquery.fileupload.css</name><params/></action>
+            <action method="addItem"><type>js_css</type><name>fileupload/css/bootstrap.min.css</name><params/></action>
+            
+            <action method="addItem"><type>js</type><name>fileupload/js/vendor/jquery.ui.widget.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/tmpl.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/load-image.all.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/canvas-to-blob.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/bootstrap.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.blueimp-gallery.min.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.iframe-transport.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-process.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-image.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-audio.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-validate.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-ui.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/main.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>fileupload/js/cors/jquery.xdr-transport.js</name><params/></action>
+            
+            <!--action method="addItem"><type>js</type><name>fileupload/js/jquery.fileupload-jquery-ui.js</name><params/></action-->
+        </reference>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+
+        <reference name="content">
+            <block type="page/html_wrapper" name="my.account.wrapper" translate="label">
+                <label>My Account Wrapper</label>
+                <action method="setElementClass"><value>my-account</value></action>
+                <block type="core/template" name="uploading" template="brosolutions/upload/index.phtml"/>
+            </block>
+        </reference>
+
+        <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
+                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Dashboard</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
+                <action method="addLink" translate="label" module="customer"><name>printx_upload</name><path>printx/upload/</path><label>File Upload Center</label></action>
+            </block>
+            <block type="checkout/cart_sidebar" name="cart_sidebar" template="checkout/cart/sidebar.phtml">
+                <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>
+            </block>
+            <block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>
+            <remove name="tags_popular"/>
+
+        </reference>
+    </printx_upload_index>
+    
+
+
+    <customer_account>
+        <reference name="customer_account_navigation" >
+            <action method="addLink" translate="label" module="customer"><name>printx_upload</name><path>printx/upload/</path><label>File Upload Center</label></action>
+        </reference>
+    </customer_account>        
+
+</layout>

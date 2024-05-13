@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<config>
+    <tabs>
+        <magekart module="magekart">
+            <label>PrintX Printing Options</label>
+            <sort_order>101</sort_order>
+        </magekart>
+    </tabs>
+    	<sections>
+		<magekart translate="label" module="magekart">
+			<label>Extensions &amp; Support</label>
+			<tab>magekart</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>999999</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+                <extensions translate="label">
+                    <label>Extensions Information</label>
+                    <frontend_type>text</frontend_type>
+                    <frontend_model>magekart/system_config_form_fieldset_magekart_extensions</frontend_model>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </extensions>
+                <support translate="label">
+                    <label>Get Support</label>
+                    <frontend_type>text</frontend_type>
+                    <frontend_model>magekart/system_config_form_fieldset_magekart_support</frontend_model>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </support>
+			</groups>
+		</magekart>
+	</sections>
+</config>

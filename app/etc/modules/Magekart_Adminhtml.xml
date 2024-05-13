@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Magekart_Adminhtml>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Adminhtml />
+            </depends>
+            <extension_name>Magekart Admin</extension_name>
+        </Magekart_Adminhtml>
+    </modules>
+</config>

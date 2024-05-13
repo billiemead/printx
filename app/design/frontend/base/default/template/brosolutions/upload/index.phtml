@@ -1,0 +1,303 @@
+<div class="upload-center">
+    <div class="page-title">
+        <h1 style="margin-bottom:5px;"><?php echo $this->__('FILE UPLOAD CENTER'); ?></h1>
+    </div>
+    <h3>File/Asset Submission and Management Center</h3>
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="fileupload">
+    <div class="fieldset">
+        <?php echo $this->getBlockHtml('formkey')?>    
+        <input type="hidden" name="action_id" value="<?php echo md5(microtime()) ?>" />
+        <div class="row half">
+            <label class="required" for="order_id"><?php echo $this->__('Order Number *') ?>:</label>
+            <div class="input-box half">
+                <input class="input-text required-entry" type="text" name="order_id" id="order_id"/>
+<p class="uploader-field-desc">Enter the Order Number you received from us when you placed your order. You can find this in either the email confirmation we sent to you or in your Customer Account.</a><p>
+            </div>
+            <div class="clear"></div>
+            <span class="please-wait" id="review-please-wait" style="display:none;">
+                <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Submitting Order Information...') ?>" title="<?php echo $this->__('Submitting Order Information...') ?>" class="v-middle" /> <?php echo $this->__('Submitting Order Information...') ?>
+            </span>
+        </div>
+        <div class="row half">    
+            <label class="required" for="email"><?php echo $this->__('E-mail Address *') ?>:</label>
+            <div class="input-box ">
+                <input class="input-text required-entry validate-email" type="text" name="email" id="email"/>
+		<p class="uploader-field-desc">Enter the e-mail address you used when you placed your order.</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+        <div class="row" id="item-container"></div>
+        <div class="clear"></div>
+        <div class="row"><br />
+            <label class="" for="order_id"><?php echo $this->__('Comments') ?>:</label>
+	<p class="uploader-field-desc">(Optional) Enter any other information relating to the file(s) you are uploading.</p>
+            <div class="input-box">
+                <textarea name="comment"></textarea>
+            </div>
+        </div>
+    </div>
+<div class="fieldset terms">
+<p>Our revolutionary File Upload Center is capable of handling very large file sizes without creating timeout issues or causing your web browser to freeze. The Dark Grey Area below also supports drag-and-drop file uploading from your desktop. Just position your file(s) anywhere over the dark grey area and release. Or select the Add Files Button and choose Start Upload. When the progress bar is completed and you see your order number appended to the file name, your files have been uploaded and there isn't anything more you need to do.</p>
+</div>
+
+    <?php if(Mage::getStoreConfig('printx_upload/customoptions/terms')): ?>
+        <div class="fieldset terms">
+            <label class="required">Terms and Conditions: </label> <br/>
+            <?php echo Mage::getStoreConfig('printx_upload/customoptions/terms') ?><br/>
+            <input type="checkbox" class=" required-entry" /> I Agree to the Above Terms
+        </div>
+    <?php endif ?>
+
+    <div class="fieldset">
+        <span class="small-title">NOTE:</span> Uploaded file(s) must be in one of the following formats: <br/>
+        <span class="strong"><?php echo Mage::getStoreConfig('printx_upload/customoptions/extension') ?></span>
+    </div>
+
+<div align="center">
+<div class="row fileupload-buttonbar" style="background: #ddd;">
+            <div class="col-lg-12">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span style="min-width:120px;margin-left: 45px;margin-right: 20px;" class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Add Files</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                <button style="min-width:120px;margin-right: 20px;" type="submit" class="btn btn-primary start">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+                <button style="min-width:120px;margin-right: 20px;" type="reset" class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+                <button style="min-width:120px;margin-right: 20px;" type="button" class="btn btn-danger delete">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" class="toggle"> Select All for Deletion
+                <!-- The global file processing state -->
+                <span class="fileupload-process"></span>
+            </div>
+            <!-- The global progress state -->
+            <div class="col-lg-5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress state -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped" style="width:85%;"><tbody class="files"></tbody></table>
+    <br>
+</div>
+
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td style="width:15%;">
+            <span class="preview"></span>
+        </td>
+        <td style="width:20%;">
+            <p style="font-size:12px;" class="name">{%=file.name%}</p>
+            <strong class="error text-danger"></strong>
+        </td>
+        <td style="width:45%;">
+            <p style="font-size:12px;" class="size">Processing...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td style="width:20%;">
+            {% if (!i && !o.options.autoUpload) { %}
+                <button style="width:85px;margin-bottom:5px;" class="btn btn-primary start" disabled>
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}
+            {% if (!i) { %}
+                <button style="width:85px;margin-bottom:5px;"  class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td style="width:15%;">
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img style="border: 1px solid #ccc;" src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td style="width:20%;">
+            <p style="font-size:11px;" class="name">
+                {% if (file.url) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                {% } else { %}
+                    <span>{%=file.name%}</span>
+                {% } %}
+            </p>
+            {% if (file.error) { %}
+                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td style="width:45%;">
+            <span style="font-size:11px;" class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td style="width:20%;">
+            {% if (file.deleteUrl) { %}
+                <button style="width:85px;"  class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" name="delete" value="1" class="toggle"> 
+            {% } else { %}
+                <button style="width:85px;"   class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
+    </form>
+</div>
+
+<script>
+/*jslint unparam: true, regexp: true */
+/*global window, $ */
+var o = new Validation('fileupload');
+var needAprove = false;
+
+jQuery(function ($) {
+    $('#order_id').bind('change', function(){
+        $('#review-please-wait').show();
+        $.post('<?php echo $this->getUrl('printx/upload/items') ?>',{order_id:$('#order_id').val()}, function(data){
+            $('#review-please-wait').hide();
+            if(data.error != false){
+                $('#item-container').html('');
+                alert(data.error);
+            } else {
+                $('#item-container').html(data.items);
+            }
+        },'json');
+    })
+    
+    'use strict';
+    // Change this to the location of your server-side upload handler:
+    var url = '<?php echo $this->getUrl('printx/upload/upload') ?>',
+        uploadButton = $('<button/>')
+            .addClass('btn btn-primary')
+            .prop('disabled', true)
+            .text('Processing...')
+            .on('click', function () {
+                if(o.validate())
+                    return;
+                var $this = $(this),
+                    data = $this.data();
+                $this
+                    .off('click')
+                    .text('Abort')
+                    .on('click', function () {
+                        $this.remove();
+                        data.abort();
+                    });
+                data.submit().always(function () {
+                    $this.remove();
+                });
+            });
+       
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        autoUpload: false,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        maxFileSize: <?php echo Mage::getStoreConfig('printx_upload/customoptions/file_size')*1024 ?>, // 5 MB
+        // Enable image resizing, except for Android and Opera,
+        // which actually support image resizing, but fail to
+        // send Blob objects via XHR requests:
+        disableImageResize: /Android(?!.*Chrome)|Opera/
+            .test(window.navigator.userAgent),
+        previewMaxWidth: 100,
+        previewMaxHeight: 100,
+        maxChunkSize: <?php echo Mage::getStoreConfig('printx_upload/customoptions/file_chunk') * 1024 ?>,
+        previewCrop: true
+    }).on('fileuploadstart', function(e, data){
+        if(!o.validate()){
+            e.preventDefault();
+        }
+    }).on('fileuploadadd', function (e, data) {
+        if(!o.validate()){
+            e.preventDefault();
+        }
+        needAprove = true;
+    }).on('fileuploadprocessalways', function (e, data) {
+        if(!o.validate()){
+            e.preventDefault();
+        }
+        var index = data.index,
+            file = data.files[index],
+            node = $(data.context.children()[index]);
+        if (file.preview) {
+            node
+                .prepend('<br>')
+                .prepend(file.preview);
+        }
+        if (file.error) {
+            node
+                .append('<br>')
+                .append($('<span class="text-danger"/>').text(file.error));
+        }
+        if (index + 1 === data.files.length) {
+            data.context.find('button')
+                .text('Upload')
+                .prop('disabled', !!data.files.error);
+        }
+    }).on('fileuploadprogressall', function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css(
+            'width',
+            progress + '%'
+        );
+    }).on('fileuploaddone', function (e, data) {
+        needAprove = false;
+        $.each(data.result.files, function (index, file) {
+            if (file.url) {
+                var link = $('<a>')
+                    .attr('target', '_blank')
+                    .prop('href', file.url);
+                $(data.context.children()[index])
+                    .wrap(link);
+            } else if (file.error) {
+                var error = $('<span class="text-danger"/>').text(file.error);
+                $(data.context.children()[index])
+                    .append('<br>')
+                    .append(error);
+            }
+        });
+    }).on('fileuploadfail', function (e, data) {
+        $.each(data.files, function (index) {
+            var error = $('<span class="text-danger"/>').text('File upload failed.');
+            $(data.context.children()[index])
+                .append('<br>')
+                .append(error);
+        });
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
+
+            window.onbeforeunload = function(){
+                if(needAprove)
+                    return "Are you sure you want to navigate away from this page? Your Order Options and File(s) will be Lost unless you Add them to the Shopping Cart";
+            }
+
+</script>

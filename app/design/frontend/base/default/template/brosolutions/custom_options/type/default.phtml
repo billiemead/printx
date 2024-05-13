@@ -1,0 +1,29 @@
+<?php
+
+
+/* @var $this Mage_Catalog_Block_Product_View_Options_Type_Select */ 
+$_option = $this->getOption();
+$helper = Mage::helper('customoptions');
+$valuesHtml = $this->getValuesHtml(); 
+
+$optionTitle = Mage::helper('brocustomoption')->getOptionTitle($_option);
+
+if ($valuesHtml): ?>
+<div <?php if ($helper->hideDependentOption() && $_option->getIsDependent() || $_option->getViewMode()==2) { ?>style="display: none;"<?php } ?> class="option<?php if ($helper->isSpecifyingCssClassEnabled() && $_option->getDivClass()) echo ' '.$_option->getDivClass() ?>">
+<dl><dt><label><?php echo $this->htmlEscape($optionTitle) ?><?php if ($_option->getIsRequire(true)): ?><span class="required">&nbsp;*</span><?php endif; ?></label>
+<?php if ($_option->getDescription()): ?><p class="note"><?php echo $_option->getDescription() ?></p><?php endif; ?></dt>
+<dd<?php if ($_option->decoratedIsLast) { ?> class="last"<?php } ?>>
+    <?php echo $valuesHtml ?>
+    <?php if ($_option->getIsRequire(true)): ?>
+    <?php if ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_RADIO || $_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_CHECKBOX): ?>
+                <span id="options-<?php echo $_option->getId() ?>-container"></span>
+    <?php endif; ?>
+    <?php endif; ?>
+    <?php if ($helper->isQntyInputEnabled() && $_option->getQntyInput() && $_option->getType()!=Mage_Catalog_Model_Product_Option::OPTION_TYPE_CHECKBOX && $_option->getType()!=Magekart_CustomOptions_Model_Catalog_Product_Option::OPTION_TYPE_MULTISWATCH): ?>
+        <span class="qty-holder">
+            <label><?php echo $helper->getDefaultOptionQtyLabel() ?> <input type="text" class="input-text qty <?php if ($_option->getIsRequire(true)) echo 'validate-greater-than-zero'; else echo 'validate-zero-or-greater'; ?>" value="<?php echo ($_option->getOptionQty()?$_option->getOptionQty():1) ?>" maxlength="12" id="options_<?php echo $_option->getId() ?>_qty" name="options_<?php echo $_option->getId() ?>_qty" onchange="opConfig.reloadPrice(); <?php if ($_option->getOptionSetQtyProduct()) { ?>optionSetQtyProduct.setQty()<?php } ?>" onKeyPress="if(event.keyCode==13){opConfig.reloadPrice(); <?php if ($_option->getOptionSetQtyProduct()) { ?>optionSetQtyProduct.setQty()<?php } ?>}"></label>
+        </span>
+    <?php endif; ?>
+</dd></dl>
+</div>
+<?php endif; ?>

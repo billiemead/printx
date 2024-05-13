@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<config>
+    <menu>
+        <printx  translate="title" module="customoptions">
+            <title>PrintX</title>
+            <sort_order>300</sort_order>
+            <children>
+                <option_type translate="title" module="customoptions">
+                    <title>Manage Option Templates</title>
+                    <sort_order>20</sort_order>
+                    <action>magekart/customoptions_options/</action>
+                </option_type>
+                <upload_center translate="title" module="customoptions">
+                    <title>File/Asset Management</title>
+                    <sort_order>30</sort_order>
+                    <action>printx/uploadcenter/</action>
+                </upload_center>
+                <departments translate="title" module="customoptions">
+                    <title>Edit Departments</title>
+                    <sort_order>40</sort_order>
+                    <action>printx/department/</action>
+                </departments>
+                <custom_pricing_options translate="title" module="customoptions">
+                    <title>Custom Pricing Options</title>
+                    <sort_order>50</sort_order>
+                    <action>adminhtml/system_config/edit/section/magekart_catalog</action>
+                </custom_pricing_options> 
+                <custom_pricing_printx_upload translate="title" module="customoptions">
+                    <title>File Upload Configuration Settings</title>
+                    <sort_order>60</sort_order>
+                    <action>adminhtml/system_config/edit/section/printx_upload</action>
+                </custom_pricing_printx_upload> 
+            </children>
+        </printx>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <catalog>
+                        <children>
+                            <customoptions translate="title" module="customoptions">
+                                <title>Product Custom Options Template</title>
+                            </customoptions>
+                        </children>
+                    </catalog>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <magekart_catalog translate="title" module="magekart">
+                                        <title>Product Custom Options Template</title>
+                                        <sort_order>1</sort_order>
+                                        <children>
+                                            <customoptions translate="title" module="customoptions">
+                                                <title>Product Custom Options Template</title>
+                                            </customoptions>
+                                        </children>
+                                    </magekart_catalog>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

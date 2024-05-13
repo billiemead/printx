@@ -1,0 +1,354 @@
+<?php
+/* @var $this Mage_Catalog_Block_Product_View_Options_Type_Select */
+$_option = $this->getOption();
+$helper = Mage::helper('customoptions');
+$valuesHtml = $this->getValuesHtml();
+
+$optionTitle = Mage::helper('brocustomoption')->getOptionTitle($_option);
+
+if ($valuesHtml):
+    ?>
+    <div <?php if ($helper->hideDependentOption() && $_option->getIsDependent() || $_option->getViewMode() == 2) { ?>style="display: none;"<?php } ?> class="option<?php if ($helper->isSpecifyingCssClassEnabled() && $_option->getDivClass()) echo ' ' . $_option->getDivClass() ?>">
+        <dl><dt><label><?php echo $this->htmlEscape($optionTitle) ?><?php if ($_option->getIsRequire(true)): ?><span class="required">&nbsp;*</span><?php endif; ?></label>
+            <?php if ($_option->getDescription()): ?><p class="note"><?php echo $_option->getDescription() ?></p><?php endif; ?></dt>
+            <dd<?php if ($_option->decoratedIsLast) { ?> class="last"<?php } ?>>
+                <?php echo $valuesHtml ?>
+                <?php if ($_option->getIsRequire(true)): ?>
+                    <?php if ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_RADIO || $_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_CHECKBOX): ?>
+                        <span id="options-<?php echo $_option->getId() ?>-container"></span>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php if ($helper->isQntyInputEnabled() && $_option->getQntyInput() && $_option->getType() != Mage_Catalog_Model_Product_Option::OPTION_TYPE_CHECKBOX && $_option->getType() != Magekart_CustomOptions_Model_Catalog_Product_Option::OPTION_TYPE_MULTISWATCH): ?>
+                    <span class="qty-holder">
+                        <label><?php echo $helper->getDefaultOptionQtyLabel() ?> <input type="text" class="input-text qty <?php if ($_option->getIsRequire(true)) echo 'validate-greater-than-zero';
+            else echo 'validate-zero-or-greater'; ?>" value="<?php echo ($_option->getOptionQty() ? $_option->getOptionQty() : 1) ?>" maxlength="12" id="options_<?php echo $_option->getId() ?>_qty" name="options_<?php echo $_option->getId() ?>_qty" onchange="opConfig.reloadPrice(); <?php if ($_option->getOptionSetQtyProduct()) { ?>optionSetQtyProduct.setQty()<?php } ?>" onKeyPress="if (event.keyCode == 13){opConfig.reloadPrice(); <?php if ($_option->getOptionSetQtyProduct()) { ?>optionSetQtyProduct.setQty()<?php } ?>}"></label>
+                    </span>
+                <?php endif; ?>
+            </dd></dl>
+    </div>
+<?php endif; ?>
+
+<div id="upload_container_<?php echo $_option->getId() ?>" class="upload_container">
+        <input type="hidden" name="upload_option_ext" id="upload_option_ext"/>
+        <input type="hidden" name="image_size_x" id="image_size_x"/>
+        <input type="hidden" name="image_size_y" id="image_size_y"/>
+        
+<div class="fieldset terms" id="ext-notification">
+            <span class="small-title">NOTE:</span> Uploaded file(s) must be in one of the following formats: <br/>
+            <span class="strong" id="ext-list"><?php echo Mage::getStoreConfig('printx_upload/customoptions/extension') ?></span>
+</div>
+
+<div class="fieldset terms">
+<p style="font-size: 10px;">Our revolutionary File Upload API is capable of handling very large file sizes without creating timeout issues or causing your web browser to freeze. The Dark Grey Area below also supports drag-and-drop file uploading from your desktop. Just position your file(s) anywhere over the dark grey area and release. Or select the Add Files Button and choose Start Upload. When the progress bar is completed and you see your order number appended to the file name, your files have been uploaded and there isn't anything more you need to do.</p>
+</div>
+
+    <?php if(Mage::getStoreConfig('printx_upload/customoptions/terms')): ?>
+        <div style="font-size: 9px;" class="fieldset terms">
+            <label class="required">Terms and Conditions: </label> <br/>
+            <?php echo Mage::getStoreConfig('printx_upload/customoptions/terms') ?><br/>
+            <input type="checkbox" class=" required-entry" /> I Agree to the Above Terms
+        </div><br />
+    <?php endif ?>
+
+        <div class="row fileupload-buttonbar">
+            <div class="fileuploadbar">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span style="min-width:85px;margin-left:10px;font-size: 11px !important;" class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Add</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                <button style="min-width:85px;margin-left:10px;font-size: 11px !important;" type="submit" class="btn btn-primary start">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+                <button style="min-width:85px;margin-left:10px;font-size: 11px !important;" type="reset" class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+                <button style="min-width:85px;margin-left:10px;font-size: 11px !important;" type="button" class="btn btn-danger delete">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <!--<input type="checkbox" class="toggle">-->
+                <!-- The global file processing state -->
+                <span class="fileupload-process"></span>
+            </div>
+            <!-- The global progress state -->
+            <div class="col-lg-5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress state -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+        <br>
+</div>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+    <td style="width:15%;">
+    <span class="preview"></span>
+    </td>
+    <td style="width:20%;">
+    <p style="font-size:10px;" class="name">{%=file.name%}</p>
+    <strong class="error text-danger"></strong>
+    </td>
+    <td style="width:45%;">
+    <p style="font-size:10px;" class="size">Processing...</p>
+    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+    </td>
+    <td style="width:20%;">
+    {% if (!i && !o.options.autoUpload) { %}
+    <button style="width:85px;margin-bottom:5px;" class="btn btn-primary start" disabled>
+    <i class="glyphicon glyphicon-upload"></i>
+    <span>Start</span>
+    </button>
+    {% } %}
+    {% if (!i) { %}
+    <button style="width:85px;" class="btn btn-warning cancel">
+    <i class="glyphicon glyphicon-ban-circle"></i>
+    <span>Cancel</span>
+    </button>
+    {% } %}
+    </td>
+    </tr>
+    {% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+    <td>
+    <span class="preview">
+    {% if (file.thumbnailUrl) { %}
+    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img style="border: 1px solid #ccc;" src="{%=file.thumbnailUrl%}"></a>
+    {% } %}
+    </span>
+    </td>
+    <td>
+    <p style="font-size:10px;" class="name">
+    {% if (file.url) { %}
+    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+    {% } else { %}
+    <span>{%=file.name%}</span>
+    {% } %}
+    </p>
+    {% if (file.error) { %}
+    <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+    {% } %}
+    </td>
+    <td>
+    <span style="font-size:10px;" class="size">{%=o.formatFileSize(file.size)%}</span>
+    </td>
+    <td>
+    {% if (file.deleteUrl) { %}
+    <button style="width:85px;"  class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+    <i class="glyphicon glyphicon-trash"></i>
+    <span>Delete</span>
+    </button>
+    <input type="checkbox" name="delete" value="1" class="toggle">
+    {% } else { %}
+    <button class="btn btn-warning cancel">
+    <i class="glyphicon glyphicon-ban-circle"></i>
+    <span>Cancel</span>
+    </button>
+    {% } %}
+    </td>
+    </tr>
+    {% } %}
+</script>
+<script>
+    
+        var SuccessUploadsCount = 0;
+        var goToCart = false;
+        if(typeof fileUploadSettings == 'undefined'){
+            var fileUploadSettings = {};
+        }
+        <?php 
+        $opt = array();
+        foreach($_option->getValues() as $value):
+            $opt[$value->getId()] =  @unserialize($value->getData('serialised_values'));
+        endforeach ?>
+        fileUploadSetting<?php echo $_option->getId() ?> = <?php echo json_encode($opt) ?>;
+        
+        jQuery('.uploading-select').bind('change', function(){
+            boxId = jQuery(this).attr('id').replace('select_','');
+            value = jQuery(this).val();
+            if(value){
+                expectedNumFiles = window['fileUploadSetting'+boxId][value]['numfiles'] *1;
+            } else {
+                expectedNumFiles = 0;
+            }
+        })
+        
+        var formWasChanged = false;
+        var expectedNumFiles = 0;
+            /*jslint unparam: true, regexp: true */
+            /*global window, $ */
+            var fileUpload;
+            if(typeof updateFiles === 'undefined'){
+                    function updateFiles(box){
+                            jQuery('.upload_container').hide();
+                            boxId = box.id.replace('select_','');
+                            var id = box.selectedIndex >= 0 ? box.options[box.selectedIndex].value : undefined;
+                            fileUploadSettings[boxId] = window['fileUploadSetting'+boxId];
+                            if(!fileUploadSettings[boxId][id]){
+                                $('upload_container_'+boxId).hide();
+                                return;
+                            }
+                            var data = fileUploadSettings[boxId][id];
+                            if(data.side == 'later'){
+                                $('upload_container_'+boxId).hide();
+                            } else {
+                                if(fileUploadSettings[boxId][id].file_extension.length>0){
+                                    $('ext-notification').show();
+                                    $('ext-list').innerHTML = fileUploadSettings[boxId][id].file_extension;
+                                    $('upload_option_ext').value = fileUploadSettings[boxId][id].file_extension;
+                                }else{
+                                    $('ext-notification').hide();
+                                    $('upload_option_ext').value = '';
+                                }
+
+                                if(fileUploadSettings[boxId][id].image_size_x.length>0){
+                                    $('image_size_x').value = fileUploadSettings[boxId][id].image_size_x;
+                                } else {
+                                    $('image_size_x').value = '';
+                                }
+
+                                if(fileUploadSettings[boxId][id].image_size_y.length>0){
+                                    $('image_size_y').value = fileUploadSettings[boxId][id].image_size_y;
+                                } else {
+                                    $('image_size_y').value = '';
+                                }
+
+                                $('upload_container_'+boxId).show();
+
+                            }
+                     }
+            }
+
+            jQuery(function ($) {
+            
+            
+            var nativeValidationFunction = productAddToCartForm.validator.options.onFormValidate;
+            
+            productAddToCartForm.validator.options.onFormValidate = function(result, form){
+                if(result === true)
+                    goToCart = true;
+                return nativeValidationFunction();
+            }
+
+
+            jQuery('#product_addtocart_form').bind('change', function(e){formWasChanged = true;})
+
+            'use strict';
+                    // Change this to the location of your server-side upload handler:
+                    var url = '<?php echo $this->getUrl('printx/upload/tempUpload') ?>',
+                    uploadButton = $('<button/>')
+                    .addClass('btn btn-primary')
+                    .prop('disabled', true)
+                    .text('Processing...')
+                    .on('click', function () {
+                    var $this = $(this),
+                            data = $this.data();
+                            $this
+                            .off('click')
+                            .text('Abort')
+                            .on('click', function () {
+                            $this.remove();
+                                    data.abort();
+                            });
+                            data.submit().always(function () {
+                    $this.remove();
+                    });
+                    });
+                    fileUpload = $('#product_addtocart_form').fileupload({
+                    url: url,
+                    dataType: 'json',
+                    autoUpload: false,
+                    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                    maxFileSize: <?php echo Mage::getStoreConfig('printx_upload/customoptions/file_size') * 1024 ?>, // 5 MB
+                    // Enable image resizing, except for Android and Opera,
+                    // which actually support image resizing, but fail to
+                    // send Blob objects via XHR requests:
+                    disableImageResize: /Android(?!.*Chrome)|Opera/
+                    .test(window.navigator.userAgent),
+                    previewMaxWidth: 150,
+                    previewMaxHeight: 150,
+                    maxChunkSize: <?php echo Mage::getStoreConfig('printx_upload/customoptions/file_chunk') * 1024 ?>,
+                    previewCrop: true
+            }).on('fileuploadstart', function(e, data){
+            }).on('fileuploadadd', function (e, data) {
+            }).on('fileuploadprocessalways', function (e, data) {
+            var index = data.index,
+                    file = data.files[index],
+                    node = $(data.context.children()[index]);
+                    if (file.preview) {
+            node
+                    .prepend('<br>')
+                    .prepend(file.preview);
+            }
+            if (file.error) {
+            node
+                    .append('<br>')
+                    .append($('<span class="text-danger"/>').text(file.error));
+            }
+            if (index + 1 === data.files.length) {
+            data.context.find('button')
+                    .text('Upload')
+                    .prop('disabled', !!data.files.error);
+            }
+            }).on('fileuploadprogressall', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#progress .progress-bar').css(
+                    'width',
+                    progress + '%'
+                    );
+            }).on('fileuploaddone', function (e, data) {
+            $.each(data.result.files, function (index, file) {
+            if (file.url) {
+            var link = $('<a>')
+                    .attr('target', '_blank')
+                    .prop('href', file.url);
+                    $(data.context.children()[index])
+                    .wrap(link);
+            SuccessUploadsCount++;
+            } else if (file.error) {
+            var error = $('<span class="text-danger"/>').text(file.error);
+                    $(data.context.children()[index])
+                    .append('<br>')
+                    .append(error);
+            }
+            });
+            }).on('fileuploadfail', function (e, data) {
+            $.each(data.files, function (index) {
+            var error = $('<span class="text-danger"/>').text('File upload failed.');
+                    $(data.context.children()[index])
+                    .append('<br>')
+                    .append(error);
+            });
+            }).prop('disabled', !$.support.fileInput)
+                    .parent().addClass($.support.fileInput ? undefined : 'disabled');   
+                    });
+                    
+            Validation.add('uploading-select','Please finish uploading your file(s) or select Upload Files Later',function(){
+                if(expectedNumFiles != 0 && SuccessUploadsCount < expectedNumFiles && jQuery('.upload_container').is(":visible")) return false;
+                else return true;
+            })                    
+            
+            
+
+            window.onbeforeunload = function(){
+                if(!goToCart && formWasChanged)
+                    return "Are you sure you want to navigate away from this page? Your Order Options and File(s) will be Lost unless you Add them to the Shopping Cart";
+            }
+            
+            
+</script>
+

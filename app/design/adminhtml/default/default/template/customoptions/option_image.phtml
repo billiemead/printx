@@ -1,0 +1,17 @@
+<?php
+
+$item = $this->getItem();
+
+if ($item) { ?>
+
+<a href="<?php echo $item->getBigImgUrl() ?>" rel="magekartLightbox[]" title="" >
+
+    <img height="70" src="<?php echo $item->getUrl() ?>" title="" class="small-image-preview v-middle" />
+
+</a>
+
+<input class="customoptions-input-del-img" type="checkbox" name="image_delete[<?php echo $item->getId() ?>]<?php if ($item->getValueId()) { echo '[' . $item->getValueId() . ']'; } ?>" value="<?php echo $item->getId() ?>" id="label-delete-img-<?php echo $item->getId(); if ($item->getValueId()) echo '-'.$item->getValueId(); ?>" />
+
+<label for="label-delete-img-<?php echo $item->getId(); if ($item->getValueId()) echo '-'.$item->getValueId(); ?>"><?php echo $item->getLabel() ?></label>
+
+<?php } ?>

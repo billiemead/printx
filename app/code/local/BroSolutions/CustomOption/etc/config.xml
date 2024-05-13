@@ -1,0 +1,302 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <BroSolutions_CustomOption>
+      <version>0.2.1</version>
+    </BroSolutions_CustomOption>
+  </modules>
+  <global>
+    <blocks>
+        <brocustomoption>
+          <class>BroSolutions_CustomOption_Block</class>
+        </brocustomoption>
+        <magekart>
+            <rewrite>
+                <customoptions_options_edit_tab_options_option>BroSolutions_CustomOption_Block_Adminhtml_Customoptions_Options_Edit_Tab_Options_Option</customoptions_options_edit_tab_options_option>
+            </rewrite>
+        </magekart>
+        <adminhtml>
+            <rewrite>
+                <catalog_product_edit_tab_options_option>BroSolutions_CustomOption_Block_Adminhtml_Catalog_Product_Edit_Tab_Options_Option</catalog_product_edit_tab_options_option>
+            </rewrite>
+        </adminhtml>
+        <catalog>
+            <rewrite>
+                <product_view_options>BroSolutions_CustomOption_Block_Catalog_Product_View_Options</product_view_options> 
+            </rewrite>
+        </catalog>
+    </blocks>
+    <helpers>
+      <brocustomoption>
+        <class>BroSolutions_CustomOption_Helper</class>
+      </brocustomoption>
+    </helpers>
+    <models>
+        <brocustomoption>
+            <class>BroSolutions_CustomOption_Model</class>
+            <resourceModel>brocustomoption_mysql4</resourceModel>
+        </brocustomoption>
+        <brocustomoption_mysql4>
+            <class>BroSolutions_CustomOption_Model_Mysql4</class>
+            <entities>
+                    <department>
+                            <table>printx_department</table>
+                    </department>
+                    <paperstock>
+                        <table>printx_paperstock</table>
+                    </paperstock>
+                    <upload>
+                        <table>printx_upload</table>
+                    </upload>
+            </entities>
+        </brocustomoption_mysql4>
+        <adminhtml>
+            <rewrite>
+                <system_config_source_product_options_type>BroSolutions_CustomOption_Model_System_Config_Source_Product_Options_Type</system_config_source_product_options_type>
+            </rewrite>
+        </adminhtml>
+        
+    </models>
+    <resources>
+        <customoption_setup>
+            <setup>
+                <module>BroSolutions_CustomOption</module>
+                <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+            </setup>
+            <connection>
+                <use>core_setup</use>
+            </connection>
+        </customoption_setup>
+    </resources>    
+    <catalog>
+        <product>
+            <type>
+                <printed translate="label" module="catalog">
+                    <label>Printed Product</label>
+                    <model>brocustomoption/product_type_printed</model>
+                    <is_qty>1</is_qty>
+                    <index_data_retreiver>brocustomoption/catalogIndex_data_printed</index_data_retreiver>
+                    <price_model>brocustomoption/product_price</price_model>
+                    <composite>0</composite>
+                </printed>
+            </type>
+            <options>
+                <custom>
+                    <groups>
+                        <printing translate="label" module="adminhtml">
+                                <label>Printing</label>
+                                <render>adminhtml/catalog_product_edit_tab_options_type_select</render>
+                                <types>
+                                     <quantity_breaks translate="label" module="adminhtml">
+                                        <label>Quantity Breaks</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </quantity_breaks>
+                                    <quantity_ranges translate="label" module="adminhtml">
+                                        <label>Quantity Ranges</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </quantity_ranges>
+                                    <size translate="label" module="adminhtml">
+                                        <label>Size</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </size>
+                                    <number_of_pages translate="label" module="adminhtml">
+                                        <label>Number of Pages</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </number_of_pages>
+                                    <ink_color translate="label" module="adminhtml">
+                                        <label>Ink Colors</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </ink_color>
+                                    <paperstock translate="label" module="adminhtml">
+                                        <label>Paperstock</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </paperstock>
+                                    <proof_options translate="label" module="adminhtml">
+                                        <label>Proof Options</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </proof_options>
+                                    <turnaround translate="label" module="adminhtml">
+                                        <label>Turnaround</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </turnaround>
+                                    <file_upload translate="label" module="adminhtml">
+                                        <label>File Upload</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </file_upload>                                                                        
+                                    <finishing translate="label" module="adminhtml">
+                                        <label>Finishing</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_finishing</render>
+                                    </finishing>  
+                                    <misc translate="label" module="adminhtml">
+                                        <label>Miscellaneous</label>
+                                        <render>brocustomoption/adminhtml_catalog_product_edit_tab_options_type_default</render>
+                                    </misc>                                    
+                                </types>
+                        </printing>
+                    </groups>
+                </custom>
+            </options>
+        </product>        
+    </catalog>
+    <events>
+        <sales_order_place_after>
+            <observers>
+                <move_files>
+                    <class>brocustomoption/observer</class>
+                    <method>salesOrderPlaceAfter</method>
+                </move_files>
+            </observers>
+        </sales_order_place_after>
+    </events>
+    <sales>
+        <order>
+            <statuses>
+                    <need_file translate="label">
+                        <label>File Required</label>
+                    </need_file>
+            </statuses>
+        </order>
+    </sales>
+  </global>
+    <default>
+        <magekart_catalog>
+            <customoptions>
+                <enabled>1</enabled>
+                <dependent_enabled>1</dependent_enabled>
+                <hide_dependent_option>1</hide_dependent_option>                
+                <weight_enabled>1</weight_enabled>
+                <price_prefix_enabled>0</price_prefix_enabled>
+                <tier_price_enabled>0</tier_price_enabled>
+                <option_sku_price_linking_enabled>0</option_sku_price_linking_enabled>
+                <option_sku_policy_enabled>0</option_sku_policy_enabled>
+                <option_sku_policy_default>1</option_sku_policy_default>
+                <option_sku_policy_apply>1</option_sku_policy_apply>
+                <inventory_enabled>0</inventory_enabled>
+                <hide_out_of_stock_options>0</hide_out_of_stock_options>
+                <display_qty_for_options>0</display_qty_for_options>                
+                <enable_qnty_input>0</enable_qnty_input>
+                <default_option_qty_label>Qty:</default_option_qty_label>                
+                <show_qty_per_option_in_cart>1</show_qty_per_option_in_cart>
+                <enable_default_text>1</enable_default_text>
+                <enable_specifying_css_class>0</enable_specifying_css_class>
+                <special_price_enabled>0</special_price_enabled>
+                <enable_customer_groups>1</enable_customer_groups>                
+                <images_thumbnails_size>70</images_thumbnails_size>
+                <enable_image_mode>1</enable_image_mode>
+                <images_above_options>1</images_above_options>
+            </customoptions>
+        </magekart_catalog>    
+        <printx_upload>
+            <customoptions>
+                <extension>jpg,jpeg,gif,png,bmp,tiff,pdf</extension>
+            </customoptions>
+        </printx_upload>
+    </default>
+  <admin>
+        <routers>
+            <printx>
+                <use>admin</use>
+                <args>
+                    <module>BroSolutions_CustomOption</module>
+                    <frontName>printx</frontName>
+                </args>
+            </printx>
+        </routers>
+  </admin> 
+  <adminhtml>
+      <events>
+            <catalog_product_new_action>
+                <observers>
+                    <customproduct_observer_catalog_product_new_action>
+                        <type>singleton</type>
+                        <class>brocustomoption/observer</class>
+                        <method>hookIntoCatalogProductNewAction</method>
+                    </customproduct_observer_catalog_product_new_action>
+                </observers>
+            </catalog_product_new_action>
+            <catalog_product_edit_action>
+                <observers>
+                    <customproduct_observer_catalog_product_edit_action>
+                        <type>singleton</type>
+                        <class>brocustomoption/observer</class>
+                        <method>hookIntoCatalogProductEditAction</method>
+                    </customproduct_observer_catalog_product_edit_action>
+                </observers>
+            </catalog_product_edit_action>
+      </events>
+      <layout>
+            <updates>
+                <brocustomoptions>
+                    <file>brosolution/customoptions.xml</file>
+                </brocustomoptions>
+            </updates>
+       </layout>
+       <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <printx_upload translate="title" module="magekart">
+                                            <title>File Upload Configuration Settings</title>
+                                            <sort_order>10</sort_order>
+                                            <children>
+                                                <customoptions translate="title" module="customoptions">
+                                                    <title>General Settings</title>
+                                                </customoptions>
+                                            </children>
+                                        </printx_upload>
+                                        <printx_info translate="title" module="magekart">
+                                            <title>PrintX Xtensions Info</title>
+                                            <sort_order>20</sort_order>
+                                            <children>
+                                                <customoptions translate="title" module="customoptions">
+                                                    <title>Version</title>
+                                                </customoptions>
+                                            </children>
+                                        </printx_info>    
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+  </adminhtml>  
+  <frontend>
+        <layout>
+            <updates>
+                <brocustomoptions>
+                    <file>brosolution/customoptions.xml</file>
+                </brocustomoptions>
+            </updates>
+       </layout> 
+       <routers>
+            <download_center>
+                <use>standard</use>
+                <args>
+                    <module>BroSolutions_CustomOption</module>
+                    <frontName>printx</frontName>
+                </args>
+            </download_center>
+        </routers>
+    </frontend>
+    <crontab>
+        <jobs>
+            <PrintUi_Design_refreshTemplateCache>
+                <schedule>
+                    <cron_expr>*/30 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>brocustomoptions/observer::uploadFTP</model>
+                </run>
+            </PrintUi_Design_refreshTemplateCache>
+        </jobs>
+    </crontab>
+</config> 

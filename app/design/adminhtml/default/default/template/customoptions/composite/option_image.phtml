@@ -1,0 +1,14 @@
+<?php
+
+
+$item   = $this->getItem();
+
+if ($item) { ?>
+
+<a <?php if ($item->getHide()) {?>style="display: none;"<?php } ?> id="customoptions_image_<?php echo $item->getOptionId(); if ($item->getOptionTypeId() && !$item->getIsOneImg()) echo '_'.$item->getOptionTypeId(); ?>" href="#" title="">
+
+    <img <?php if ($item->getHide()) {?>style="padding: 5px;"<?php } ?> src="<?php echo $item->getUrl() ?>" title="" class="small-image-preview v-middle" />
+
+</a>
+
+<?php } ?>

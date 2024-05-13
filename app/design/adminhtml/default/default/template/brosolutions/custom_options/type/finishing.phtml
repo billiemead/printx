@@ -1,0 +1,623 @@
+<?php
+$helper = Mage::helper('customoptions');
+$width = 1000;
+if ($helper->isDependentEnabled()) $width += 210;
+if ($helper->isWeightEnabled()) $width += 85;
+if ($helper->isTierPriceEnabled()) $width += 30;
+if ($helper->isSpecialPriceEnabled()) $width += 230;
+if ($helper->isInventoryEnabled()) $width += 50;
+?>
+<script type="text/javascript">
+    //<![CDATA[
+
+              
+              
+    
+    OptionTemplateFinishing = '<table class="border finishing-option" cellpadding="0" cellspacing="0" style="width:<?php echo $width ?>px;">'+        
+        '<thead>'+
+        '<tr class="headings">'+
+        '<th class="type-paper-department"><?php echo $helper->__js('Department') ?></th>'+
+        '<th class="type-paper-taskdesc"><?php echo $helper->__js('Description') ?></th>'+
+        '<th class="type-methodid"><?php echo $helper->__js('Method ID') ?></th>'+
+        '<th class="type-machineid"><?php echo $helper->__js('Machine') ?></th>'+
+        '<th class="type-setup-time"><?php echo $helper->__js('SetupTime') ?></th>'+
+        '<th class="type-gap"><?php echo $helper->__js('Gap') ?></th>'+
+        //'<th class="type-makeready"><?php echo $helper->__js('Make Ready') ?></th>'+
+        '<th class="type-taskqty"><?php echo $helper->__js('Task Qty') ?></th>'+
+        '<th class="type-weight"><?php echo $helper->__js('Weight (+/-)') ?></th>'+     
+        '<th class="type-speed"><?php echo $helper->__js('Speed') ?></th>'+
+        '<th class="type-rate"><?php echo $helper->__js('Rate') ?></th>'+
+        '<th class="type-price"><?php echo $helper->__js('Variable Price') ?></th>'+
+        '<th class="type-fixedprice"><?php echo $helper->__js('Fixed') ?></th>'+
+        '<th class="type-setup"><?php echo $helper->__js('Setup Cost') ?></th>'+
+        '<th class="type-minimum"><?php echo $helper->__js('Minimum') ?></th>'+
+        '<th class="type-butt last">'+
+            '&nbsp;'+
+            '<input type="hidden" class="required-option-select-type-rows" name="validation_{{option_id}}_result" value="" >'+
+            '<input type="hidden" class="igi" id="product_option_{{option_id}}_in_group_id" name="product[options][{{option_id}}][in_group_id]" value="{{in_group_id}}"/>'+
+        '</th>'+
+        '</tr>'+
+        '</thead>'+
+        '<tbody id="select_option_type_row_{{option_id}}">'+
+        '</tbody>'+
+        '</table>';
+
+    OptionTemplateFinishingRow = '<tr id="product_option_{{id}}_select_{{select_id}}">'+
+            '<td>'+
+                '<input type="hidden" name="product[options][{{id}}][values][{{select_id}}][option_type_id]" value="{{option_type_id}}">'+
+                '<input type="hidden" id="product_option_{{id}}_select_{{select_id}}_is_delete" name="product[options][{{id}}][values][{{select_id}}][is_delete]" value="">'+
+                '<input type="hidden" class="igi" id="product_option_{{id}}_select_{{select_id}}_in_group_id" name="product[options][{{id}}][values][{{select_id}}][in_group_id]" value="{{in_group_id}}"/>'+
+                '<input type="hidden" class="required-entry input-text select-type-title" id="product_option_{{id}}_select_{{select_id}}_default_title" name="product[options][{{id}}][values][{{select_id}}][title]" value="default_title">'+
+                '<?php echo $this->getDepartmentsHtml() ?>{{checkboxScopeTitle}}'+
+            '</td>'+
+            '<td><input type="text" class="input-text required-entry product-option-taskdesc " id="product_option_{{id}}_select_{{select_id}}_title" name="product[options][{{id}}][values][{{select_id}}][taskdesc]" value="{{taskdesc}}" ></td>'+
+            '<td><input type="text" class="input-text optional product-option-methodid " id="product_option_{{id}}_select_{{select_id}}_methodid" name="product[options][{{id}}][values][{{select_id}}][methodid]" value="{{methodid}}" ></td>'+
+            '<td><input type="text" class="input-text optional product-option-machineid " id="product_option_{{id}}_select_{{select_id}}_machineid" name="product[options][{{id}}][values][{{select_id}}][machineid]" value="{{machineid}}" ></td>'+
+            '<td><input type="text" class="input-text required-entry product-option-setuptime  validate-number" id="product_option_{{id}}_select_{{select_id}}_setuptime" name="product[options][{{id}}][values][{{select_id}}][setuptime]" value="{{setuptime}}" ></td>'+
+            '<td><input type="text" class="input-text required-entry product-option-gap  validate-number" id="product_option_{{id}}_select_{{select_id}}_gap" name="product[options][{{id}}][values][{{select_id}}][gap]" value="{{gap}}" ></td>'+
+            '<td><input type="text" class="input-text required-entry product-option-taskqty  validate-number" id="product_option_{{id}}_select_{{select_id}}_taskqty" name="product[options][{{id}}][values][{{select_id}}][taskqty]" value="{{taskqty}}" ></td>'+
+            '<td><input type="text" class="input-text optional product-option-weight  validate-number" id="product_option_{{id}}_select_{{select_id}}_weight" name="product[options][{{id}}][values][{{select_id}}][weight]" value="{{weight}}" ></td>'+
+            '<td><input type="text" class="input-text required-entry product-option-speed  validate-number" id="product_option_{{id}}_select_{{select_id}}_speed" name="product[options][{{id}}][values][{{select_id}}][speed]" value="{{speed}}" ></td>'+
+            '<td><input type="text" class="input-text required-entry product-option-rate  validate-number" id="product_option_{{id}}_select_{{select_id}}_rate" name="product[options][{{id}}][values][{{select_id}}][rate]" value="{{rate}}" ></td>'+
+            '<td><input type="text" class="input-text required-entry product-option-price  validate-number" id="product_option_{{id}}_select_{{select_id}}_price" name="product[options][{{id}}][values][{{select_id}}][price]" value="{{price}}" ></td>'+
+            '<td><input type="text" class="input-text optional product-option-fixedprice  validate-number" id="product_option_{{id}}_select_{{select_id}}_fixedprice" name="product[options][{{id}}][values][{{select_id}}][fixedprice]" value="{{fixedprice}}" ></td>'+
+            '<td><input type="text" class="input-text optional product-option-setup  validate-number" id="product_option_{{id}}_select_{{select_id}}_setup" name="product[options][{{id}}][values][{{select_id}}][setup]" value="{{setup}}" ></td>'+
+            '<td><input type="text" class="input-text optional product-option-minimum  validate-number" id="product_option_{{id}}_select_{{select_id}}_minimum" name="product[options][{{id}}][values][{{select_id}}][minimum]" value="{{minimum}}" ></td>'+
+            '<td><?php echo $this->jsQuoteEscape($this->getAddImageButtonHtml()) ?></td>'+
+            '<td class="last"><span title="Delete row"><?php echo $this->jsQuoteEscape($this->getDeleteButtonHtml()) ?></span></td>'+
+        '</tr>'+
+        '<tr id="image_option_row_{{select_id}}" style="{{image_tr_style}}">'+
+            <?php if ($helper->isDependentEnabled()) { ?>'<td>&nbsp;</td>'+<?php } ?>
+            '<td colspan="3" id="image_option_td_{{select_id}}"></td>'+
+            <?php if ($helper->isTierPriceEnabled()) { ?>'<td>&nbsp;</td>'+<?php } ?>
+        '</tr>';
+    
+    OptionTemplateFinishingTierPriceRow = '<tr id="product_option_{{id}}_select_{{select_id}}_price_{{tier_price_id}}">'+
+        <?php if ($helper->isDependentEnabled()) { ?>'<td>&nbsp;</td>'+<?php } ?>
+        '<td>'+
+            '<input type="hidden" id="product_option_{{id}}_select_{{select_id}}_price_{{tier_price_id}}_real" name="product[options][{{id}}][values][{{select_id}}][tiers][{{tier_price_id}}][tier_price_id]" value="{{tier_price_real_id}}" />'+
+            '<input type="hidden" id="product_option_{{id}}_select_{{select_id}}_price_{{tier_price_id}}_is_delete" name="product[options][{{id}}][values][{{select_id}}][tiers][{{tier_price_id}}][is_delete]" value="" />'+
+            '<input type="text" class="input-text required-entry validate-greater-than-zero" style="width:50px !important;" id="product_option_{{id}}_select_{{select_id}}_price_{{tier_price_id}}_qty" name="product[options][{{id}}][values][{{select_id}}][tiers][{{tier_price_id}}][qty]" value="{{qty}}"> <?php echo $helper->__js('and above') ?>'+
+        '</td>'+
+        '<td><input type="text" class="input-text required-entry validate-number" id="product_option_{{id}}_select_{{select_id}}_price_{{tier_price_id}}_price" name="product[options][{{id}}][values][{{select_id}}][tiers][{{tier_price_id}}][price]" value="{{price}}"></td>'+
+        '<td><?php echo $this->jsQuoteEscape($this->getTierPriceTypeSelectHtml()) ?>{{checkboxScopePrice}}</td>'+
+        '<td><button type="button" id="product_option_{{id}}_select_{{select_id}}_price_{{tier_price_id}}_button" onclick="selectOptionFinishingType.removeTierPriceRow({{id}}, {{select_id}}, {{tier_price_id}})" class="delete icon-btn" style="width:23px !important;"><span><?php echo $helper->__js('Hide') ?></span></button></td>';
+  
+    OptionTemplateFinishingImage = '<li class="image">'+
+            '<a href="#" class="close" onclick="selectOptionFinishingType.removeImage(this); return false;"><big>x</big></a><br/>'+
+            '<a href="{{big_img_url}}" rel="magekartLightbox[]" title="" >'+
+                '<img height="70" src="{{url}}" title="" class="small-image-preview v-middle" />'+
+            '</a>'+
+            '<input type="hidden" name="product[options][{{id}}][values][{{select_id}}][image_sort][]" value="{{option_type_image_id}}" />'+
+        '</li>';
+    
+    OptionTemplateFinishingColor = '<li class="image">'+
+            '<a href="#" class="close" onclick="selectOptionFinishingType.removeImage(this); return false;"><big>x</big></a><br/>'+
+            '<div onclick="selectOptionFinishingType.showColor(this);" class="small-image-preview v-middle" style="display:inline-block; width:35px; height:35px; background: {{image_file}}; margin-bottom:5px;">&nbsp;</div><br/>'+
+            '<input class="input-color color {hash:true}" type="text" name="product[options][{{id}}][values][{{select_id}}][image_color][{{option_type_image_id}}]" value="{{image_file}}"  onmousedown="this.color.pickerOnfocus = false;" onclick="if (!$(this).hasClassName(\'selected\')) {$(this).select(); $(this).addClassName(\'selected\');} this.color.pickerOnfocus = true;" onchange="selectOptionFinishingType.changeColor(this)" />'+
+            '<input type="hidden" name="product[options][{{id}}][values][{{select_id}}][image_sort][]" value="{{option_type_image_id}}" />'+
+        '</li>';
+    
+    OptionTemplateFinishingFile = '<tr class="file_option_rows_{{select_id}}">'+
+            <?php if ($helper->isDependentEnabled()) { ?>'<td>&nbsp;</td>'+<?php } ?>
+            '<td colspan="3"><table style="border:none;">'+
+                '<tr id="product_option_{{id}}_select_{{select_id}}_upload_{{count}}"><td style="border:none;">'+
+                    '<label><input type="radio" name="product[options][{{id}}][values][{{select_id}}][upload_type][{{count}}]" value="file" onclick="selectOptionFinishingType.changeUploadType(this)" checked/> <?php echo $helper->__js('File') ?></label>&nbsp;&nbsp;&nbsp;'+
+                    '<label><input type="radio" name="product[options][{{id}}][values][{{select_id}}][upload_type][{{count}}]" value="color" onclick="selectOptionFinishingType.changeUploadType(this)" /> <?php echo $helper->__js('Color') ?></label>&nbsp;&nbsp;&nbsp;'+
+                    //'<label><input type="radio" name="product[options][{{id}}][values][{{select_id}}][upload_type][{{count}}]" value="gallery" onclick="selectOptionFinishingType.changeUploadType(this)" /> <?php echo $helper->__js('Gallery') ?></label>'+
+                '</td></tr>'+
+                '<tr>'+
+                    '<td style="border:none;">'+
+                        '<span><input class="input-file" type="file" name="file_{{id}}_{{select_id}}_{{count}}" id="product_option_{{id}}_select_{{select_id}}_upload_{{count}}_file" value="" /></span>'+
+                        '<span style="display:none;">'+
+                            '<?php echo $helper->__js('Color') ?>: '+
+                            '<input class="input-color color {hash:true}" type="text" name="product[options][{{id}}][values][{{select_id}}][upload_color][{{count}}]" id="product_option_{{id}}_select_{{select_id}}_upload_{{count}}_color" value="#" onmousedown="this.color.pickerOnfocus = false;" onclick="this.color.pickerOnfocus = true;" onchange="selectOptionFinishingType.changeUploadColor(this)" disabled /> &nbsp; '+
+                            '<div onclick="selectOptionFinishingType.showColor(this);" style="display:inline-block; width:18px; height:18px; border: 1px solid black;">&nbsp;</div>'+
+                        '</span>'+
+                        '<span style="display:none;"><?php echo $helper->__js('Gallery') ?>: <input class="input-text" type="text" name="product[options][{{id}}][values][{{select_id}}][upload_gallery][{{count}}]" id="product_option_{{id}}_select_{{select_id}}_upload_{{count}}_gallery" value="" disabled /></span>'+
+                    '</td>'+
+                    '<td style="border:none;"><button type="button" onclick="selectOptionFinishingType.removeFileRow(this)" class="delete icon-btn"><span><?php echo $helper->__js('Hide') ?></span></button></td>'+
+                '</tr>'+
+            '</table></td>'+
+            <?php if ($helper->isTierPriceEnabled()) { ?>'<td>&nbsp;</td>'+<?php } ?>
+        '</tr>';
+
+    function PHP_Unserialize_(input) {
+        input = input.toString();
+        var length = 0;
+        switch (input.charAt(0)) {
+            case 'a':
+                length = PHP_Unserialize_GetLength(input);
+                input  = input.substr(String(length).length + 4);
+
+                var arr   = new Array();
+                var key   = null;
+                var value = null;
+
+                for (var i=0; i<length; ++i) {
+                    key   = PHP_Unserialize_(input);
+                    input = key[1];
+
+                    value = PHP_Unserialize_(input);
+                    input = value[1];
+
+                    arr[key[0]] = value[0];
+                }
+
+                input = input.substr(1);
+                return [arr, input];
+                break;
+
+            case 's':
+                length = PHP_Unserialize_GetLength(input);
+                return [String(input.substr(String(length).length + 4, length)), input.substr(String(length).length + 6 + length)];
+                break;
+
+            case 'i':
+            case 'd':
+                var num = Number(input.substring(2, input.indexOf(';')));
+                return [num, input.substr(String(num).length + 3)];
+                break;
+
+            case 'b':
+                var bool = (input.substr(2, 1) == 1);
+                return [bool, input.substr(4)];
+                break;
+
+            case 'N':
+                return [null, input.substr(2)];
+                break;
+
+            case 'o':
+            case 'O':
+            case 'r':
+            case 'C':
+            case 'R':
+            case 'U':
+                alert('Error: Unsupported PHP data type found!');
+            default:
+                return [null, null];
+                break;
+        }
+    }
+    function PHP_Unserialize_GetLength(input) {
+        input = input.substring(2);
+        var length = Number(input.substr(0, input.indexOf(':')));
+        return length;
+    }
+    selectOptionFinishingType = {
+        div: 'select_option_type_row',        
+        maxItemId: 0,
+        templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
+        templateText : OptionTemplateFinishingRow,
+        add: function(data) {
+            //alert(data.tier_price[1]);
+            this.template = new Template(this.templateText, this.templateSyntax);
+
+            if (data.target || data.srcElement) {//data is Event (work in IE and Firefox)
+                element = $(Event.findElement(data, 'button'));
+                optionId = element.readAttribute('id').sub('add_select_row_button_', '');
+                data = {};
+                data.option_type_id = '-1';
+                data.select_id = this.maxItemId = this.maxItemId + 1;
+                data.image_tr_style = 'display:none';
+                data.option_id = optionId;
+            } else {
+                optionId = data.option_id;
+                data.select_id = data.option_type_id;                
+                if (parseInt(data.select_id)>this.maxItemId) this.maxItemId = parseInt(data.select_id);
+            }                        
+            
+            
+
+ 
+            
+            
+            visibleElementsCount = $$('#select_option_type_row_'+optionId+' tr').findAll(function(el) { return el.visible();}).length;
+           /* if(visibleElementsCount>=1)
+                return;
+            else{ */
+                if($('add_select_row_button_'+optionId)){
+                   // $('add_select_row_button_'+optionId).addClassName('disabled');
+                }
+            //}
+            
+            if(!data.in_group_id || data.in_group_id==0) {                    
+                data.in_group_id = data.in_group_id_view = maxInGroupId = maxInGroupId + 1;
+            } else {
+                if (data.in_group_id<65536 && parseInt(data.in_group_id)>maxInGroupId) maxInGroupId = parseInt(data.in_group_id);
+            }            
+            
+            if (!data.default_type) {
+                var inputType = $("product_option_" + optionId + "_type");
+                switch (inputType.value) {
+                    case 'drop_down':
+                    case 'radio':
+                    case 'swatch':    
+                    
+                        data.default_type = 'radio';
+                        break;
+                    case 'checkbox':
+                    case 'multiple':
+                    case 'multiswatch':
+                        data.default_type = 'checkbox';
+                        break;
+                }
+            }
+            
+            data.id  = optionId;
+            if (!data.image_button_label) data.image_button_label = '<?php echo $helper->__js('Add Image') ?>';
+            Element.insert($(this.div+'_'+data.id), {'bottom':this.template.evaluate(data)});
+
+                       
+
+//            if (data.price_type) {
+//                $A($('product_option_'+data.id+'_select_'+data.select_id+'_price_type').options).each(function(option){
+//                    if (option.value==data.price_type) option.selected = true;
+//                });
+//            }
+
+            if (data.department) {
+                $A($('product_option_'+data.id+'_select_'+data.select_id+'_department').options).each(function(option){
+                    if (option.value==data.department) option.selected = true;
+                });
+            }
+            
+//            if (data.tiers) {
+//                for(var key in data.tiers) {                    
+//                    if (!data.tiers.hasOwnProperty(key)) continue;
+//                    var tierPriceId = data.tiers[key].option_type_tier_price_id;
+//                    if (!tierPriceId) tierPriceId = data.tiers[key].tier_price_id;                    
+//                    this.addTierPriceRow(data.id, data.select_id, tierPriceId, data.tiers[key].qty, data.tiers[key].price, data.tiers[key].price_type);
+//                }
+//            }
+
+            if(data.side){ $('product_option_'+data.id+'_select_'+data.select_id+'_title').value=data.side;}
+            
+            
+            if (data.images) {
+                this.addImages(data.id, data.select_id, data.images);
+            }
+            
+            
+            if (data.checkboxScopeTitle) {
+                //set disabled
+                if ($('product_option_'+data.id+'_select_'+data.select_id+'_title') && data.scopeTitleDisabled) {
+                    $('product_option_'+data.id+'_select_'+data.select_id+'_title').disable();
+                }
+            }
+            
+            if (data.checkboxScopePrice || data.price_disabled) {
+                //set disabled
+                if ($('product_option_'+data.id+'_select_'+data.select_id+'_price') && (data.scopePriceDisabled || data.price_disabled)) {                    
+                    $('product_option_'+data.id+'_select_'+data.select_id+'_price').disable();
+                    $$('input[id^="product_option_'+data.id+'_select_'+data.select_id+'_price_"]', 'select[id^="product_option_'+data.id+'_select_'+data.select_id+'_price_"]', 'button[id^="product_option_'+data.id+'_select_'+data.select_id+'_price_"]').each(function(el) {
+                        if (el.id.indexOf('_use_default')==-1) {
+                            if (el.id.indexOf('_real')!=-1) el.value = '-1'; // real_id
+                            el.disabled = true;                            
+                        }
+                    });                                        
+                }
+            }
+            switch($('product_option_'+optionId+'_formula').value){
+                
+                <?php foreach(Mage::getModel('brocustomoption/formula')->getFormulasList() as $formulaId => $title): ?>
+                    case '<?php echo $formulaId ?>': var text = '<?php echo $this->jsQuoteEscape($this->getHelperHtml($formulaId)) ?>'; 
+                        $$('#select_option_type_row_'+optionId+' input[type="text"]').each(function(el){
+                                el.removeClassName('required-entry').addClassName('not-used').disabled=true;
+                                
+                                <?php echo Mage::getModel('brocustomoption/formula')->getJSUsedFields($formulaId) ?>.each(function(val){
+                                    if(el.hasClassName('optional'))
+                                      el.removeClassName('not-used').disabled=false;
+                                    if(el.hasClassName(val))
+                                        el.addClassName('required-entry').removeClassName('not-used').disabled=false;
+                                })
+                        });
+                        break;
+                <?php endforeach ?>    
+            }
+            
+            this.bindRemoveButtons();
+        },
+        enableQtyAndPrice: function(optionId, selectId) {
+            if ($('product_option_'+optionId+'_select_'+selectId+'_customoptions_qty')) $('product_option_'+optionId+'_select_'+selectId+'_customoptions_qty').disabled = false;
+            if ($('product_option_'+optionId+'_select_'+selectId+'_price')) {                    
+                $('product_option_'+optionId+'_select_'+selectId+'_price').enable();
+                $$('input[id^="product_option_'+optionId+'_select_'+selectId+'_price_"]', 'select[id^="product_option_'+optionId+'_select_'+selectId+'_price_"]', 'button[id^="product_option_'+optionId+'_select_'+selectId+'_price_"]').each(function(el) {
+                    if (el.id.indexOf('_use_default')==-1) {
+                        if (el.id.indexOf('_real')!=-1) el.value = '-1'; // real_id
+                        el.disabled = false;                            
+                    }
+                });                                        
+            }
+        },
+        remove: function(event){
+            var element = $(Event.findElement(event, 'tr'));
+            if(element){
+                var addButton = $(Event.findElement(event, 'div.option-box').select('.add-select-row'));
+                $(element.readAttribute('id')+'_is_delete').value = '1';
+                $(element).addClassName('no-display');
+                $(element).addClassName('ignore-validate');
+                element.hide();
+                
+                // remove image
+                var ids = element.readAttribute('id').split('_');
+                selectId = ids[ids.length-1];
+                $('image_option_row_'+selectId).remove();
+                $$('tr.file_option_rows_'+selectId).each(function(elTr){
+                    elTr.remove();
+                });
+                
+                // remove tier price
+                $$('tr[id^="'+element.readAttribute('id')+'_"]').each(function(elTr){
+                    elTr.remove();
+                });
+                
+                // remove from children id                
+                productChildrenOptions.removeChildrenElement(element);         
+                if(addButton.length>0)
+                    addButton[0].removeClassName('disabled');
+            }
+        },
+        bindRemoveButtons: function() {
+            var buttons = $$('.delete-select-row');
+            for(var i=0;i<buttons.length;i++){
+                if(!$(buttons[i]).binded){
+                    $(buttons[i]).binded = true;
+                    Event.observe(buttons[i], 'click', this.remove.bind(this));
+                }
+            }
+        },
+        bindAddButton: function(optionId) {
+            $('formula_selector_'+optionId).show();
+            $('qty_formula_helper_'+optionId).show();
+            $('qty_formula_helper_description_'+optionId).show();
+            $('internal_note_'+optionId).show();
+            
+            
+            Event.observe($('product_option_'+optionId+'_formula'),'change',this.addFormulaHelper);
+            this.processFormulaSelect($('product_option_'+optionId+'_formula'));
+        
+            visibleElementsCount = $$('#select_option_type_row_'+optionId+' tr').findAll(function(el) { return el.visible();}).length;
+            /*if(visibleElementsCount>=1){
+                if($('add_select_row_button_'+optionId)){
+                    $('add_select_row_button_'+optionId).addClassName('disabled');
+                }
+            }*/
+        
+            var buttons = $$('.add-select-row');
+            for(var i=0;i<buttons.length;i++){
+                if(!$(buttons[i]).binded){
+                    $(buttons[i]).binded = true;
+                    Event.observe(buttons[i], 'click', this.add.bind(this));
+                }
+            }
+        },
+                
+        addFormulaHelper: function(event){
+            optionId = this.readAttribute('id').sub('product_option_', '').sub('_formula', '');
+            $$('#product_option_'+optionId+'_type_printing .validation-advice').each(function(el){el.remove()})
+            switch(this.value){
+                
+                <?php foreach(Mage::getModel('brocustomoption/formula')->getFormulasList() as $formulaId => $title): ?>
+                    case '<?php echo $formulaId ?>': var text = '<?php echo $this->jsQuoteEscape($this->getHelperHtml($formulaId)) ?>'; 
+                        $$('#select_option_type_row_'+optionId+' input[type="text"]').each(function(el){
+                                el.removeClassName('required-entry').addClassName('not-used').disabled=true;
+                                
+                                <?php echo Mage::getModel('brocustomoption/formula')->getJSUsedFields($formulaId) ?>.each(function(val){
+                                  if(el.hasClassName('optional'))
+                                      el.removeClassName('not-used').disabled=false;
+                                    if(el.hasClassName(val))
+                                        el.addClassName('required-entry').removeClassName('not-used').disabled=false;
+                                })
+                        });                
+                        break;
+                <?php endforeach ?>    
+            }
+            $('qty_formula_helper_'+optionId).update(text);
+            
+        },
+        
+        processFormulaSelect: function(element){
+            var optionId = element.readAttribute('id').sub('product_option_', '').sub('_formula', '');
+            switch(element.value){
+                
+                <?php foreach(Mage::getModel('brocustomoption/formula')->getFormulasList() as $formulaId => $title): ?>
+                    case '<?php echo $formulaId ?>': var text = '<?php echo $this->jsQuoteEscape($this->getHelperHtml($formulaId)) ?>'; 
+                        $$('#select_option_type_row_'+optionId+' input[type="text"]').each(function(el){
+                                el.removeClassName('required-entry').addClassName('not-used').disabled=true;
+                                
+                                <?php echo Mage::getModel('brocustomoption/formula')->getJSUsedFields($formulaId) ?>.each(function(val){
+                                  if(el.hasClassName('optional'))
+                                      el.removeClassName('not-used').disabled=false;
+                                    if(el.hasClassName(val))
+                                        el.addClassName('required-entry').removeClassName('not-used').disabled=false;
+                                })
+                        });
+                        break;
+                <?php endforeach ?>    
+            }
+            $('qty_formula_helper_'+optionId).update(text);
+        },
+        
+        addFileRow: function(optionId, selectId) {
+            var fileCount = 1;
+            //alert($$('input[name="file_'+optionId+'_'+selectId+'_'+fileCount+'"]').length);
+            while ($$('input[name="file_'+optionId+'_'+selectId+'_'+fileCount+'"]').length!=0) {
+                fileCount++;
+            }
+            var template = new Template(OptionTemplateFinishingFile, this.templateSyntax);
+            Element.insert($$('#image_option_row_'+selectId, 'tr.file_option_rows_'+selectId).last(), {'after':template.evaluate({'id':optionId, 'select_id':selectId, count:fileCount})});
+        },
+        removeFileRow: function(obj) {
+            obj.up('table').up('tr').remove();
+	},
+        
+        maxTierPriceId: 0,
+        addTierPriceRow: function(optionId, selectId, tierPriceId, qty, price, priceType) {
+            // prepare data
+            var data = {};
+            data.id = optionId;
+            data.select_id = selectId;            
+            if (tierPriceId>0) {
+                data.tier_price_id = tierPriceId;
+                data.tier_price_real_id = tierPriceId;
+                if (parseInt(tierPriceId)>this.maxTierPriceId) this.maxTierPriceId = parseInt(tierPriceId);
+                data.qty = qty;
+                data.price = price;                
+            } else {    
+                data.tier_price_id = this.maxTierPriceId = this.maxTierPriceId + 1;
+                data.tier_price_real_id = -1;
+            }
+            
+            // select last el            
+            var elTrs = $$('tr[id^="product_option_'+optionId+'_select_'+selectId+'_"]');            
+            if (elTrs.length>0) {
+                var lastElTr = elTrs.last();
+            } else {
+                var lastElTr = $('product_option_'+optionId+'_select_'+selectId);
+            }
+            var template = new Template(OptionTemplateFinishingTierPriceRow, this.templateSyntax);
+            // insert tier price row after last el
+            Element.insert(lastElTr, {'after':template.evaluate(data)});
+            
+            if (priceType) {                
+                $A($('product_option_'+data.id+'_select_'+data.select_id+'_price_'+data.tier_price_id+'_price_type').options).each(function(option){
+                    if (option.value==priceType) option.selected = true;
+                });
+            }
+        },
+        removeTierPriceRow: function(optionId, selectId, tierPriceId) {         
+            var trEl = $('product_option_'+optionId+'_select_'+selectId+'_price_'+tierPriceId);
+            if(trEl){
+                $(trEl.readAttribute('id')+'_is_delete').value = '1';
+                $(trEl).addClassName('no-display');
+                $(trEl).addClassName('ignore-validate');
+                trEl.hide();                
+            }
+	},
+        
+        addImages: function(optionId, selectId, images) {
+            if (!images || images.length==0) return;
+            
+            var imgHtml = '';
+            images.each(function(img) {
+                if (img.source==1) { // file
+                    var template = new Template(OptionTemplateFinishingImage, this.templateSyntax);
+                } else if (img.source==2) { //color
+                    var template = new Template(OptionTemplateFinishingColor, this.templateSyntax);
+                }
+                imgHtml += template.evaluate(img);
+                
+            }.bind(this));
+            
+            imgHtml += '<input type="hidden" id="product_option_'+optionId+'_select_'+selectId+'_image_change" name="product[options]['+optionId+'][values]['+selectId+'][image_change]" value="0" />';
+                        
+            imgHtml = '<ul id="image_option_ul_'+selectId+'">' + imgHtml + '</ul>';
+            $('image_option_td_'+selectId).innerHTML = imgHtml;
+            
+            if (images.length>1) {
+                Sortable.create('image_option_ul_'+selectId, {
+                    tag: 'li', overlap: 'horizontal', constraint: false,
+                    onChange:function(element) {
+                        var img = element.down('img');
+                        if (img) $(img.up('a')).addClassName('disableLightbox');
+                        var elImageSortChange = $('product_option_'+optionId+'_select_'+selectId+'_image_change');
+                        if (elImageSortChange) {
+                            elImageSortChange.value = 1;
+                            elImageSortChange.setHasChanges(); 
+                        }
+                    }
+                });
+            }
+        },
+        removeImage: function(el) {
+            var rmEl = el.next('a');
+            if (rmEl) rmEl.remove();
+            var rmEl = el.next('a');
+            if (rmEl) rmEl.remove();
+            var rmEl = el.next('div');
+            if (rmEl) rmEl.remove();
+            
+            var hiddenEl = el.next('input');
+            if (hiddenEl.type!='hidden') {
+                hiddenEl.remove();
+                var hiddenEl = el.next('input');
+            }
+            
+            hiddenEl.name = hiddenEl.name.replace("image_sort", 'image_delete');
+            
+            var ids = hiddenEl.name.split('][');
+            var elImageSortChange = $('product_option_'+ids[1]+'_select_'+ids[3]+'_image_change');
+            if (elImageSortChange) {
+                elImageSortChange.value = 1;
+                elImageSortChange.setHasChanges(); 
+            }
+            el.remove();
+        },
+        changeUploadType: function(el) {
+            var id = el.up('tr').id;
+            var types = ['file', 'color', 'gallery'];
+            types.each(function(type) {
+                $(id + '_' + type).up('span').hide();
+                $(id + '_' + type).disable();
+            });
+            
+            $(id + '_' + el.value).up('span').show();
+            $(id + '_' + el.value).enable();
+            if (el.value=='color') jscolor.init();
+        },
+        showColor: function(el) {
+            var colorEl = el.up().down('input.color');
+            colorEl.color.showPicker();
+            colorEl.focus();
+        },        
+        changeColor: function(el) {
+            this.changeUploadColor(el, 1);
+            var ids = el.name.split('][');
+            var elImageSortChange = $('product_option_'+ids[1]+'_select_'+ids[3]+'_image_change');
+            if (elImageSortChange) {
+                elImageSortChange.value = 1;
+                elImageSortChange.setHasChanges(); 
+            }
+        },
+        changeUploadColor: function(el, up) {
+            var color = el.value.replace('##', '#');
+            if (color.indexOf('#')==-1) {
+                color = '#' + color;
+            }
+            el.value = color;
+            
+            if (up) {
+                el.previous('div').style.background = color;
+            } else {
+                el.next('div').style.background = color;
+            }
+        }
+    };
+
+    if ($('option_panel_type_select')) {
+        $('option_panel_type_select').remove();
+    }
+
+    selectOptionFinishingType.bindRemoveButtons();
+
+    Validation.addAllThese([
+        ['required-option-select-type-rows', '<?php echo $helper->__js('Please add rows to option.') ?>', function(v, elm) {
+                var optionContainerElm = elm.up('div.grid');
+                var selectTypesFlag = false;
+                selectTypeElements = $$('#'+optionContainerElm.id+' .select-type-title');
+                selectTypeElements.each(function(elm){
+                    if (elm.id && elm.up('tr').visible()) {
+                        selectTypesFlag = true;
+                    }
+                });
+                elm.advaiceContainer = optionContainerElm.id+'_advice';
+                return selectTypesFlag;
+            }]]);
+
+        if($('add_select_row_button')){
+        Event.observe('add_select_row_button', 'click', selectOptionFinishingType.add.bind(selectOptionFinishingType));
+    }
+    //]]>
+</script>

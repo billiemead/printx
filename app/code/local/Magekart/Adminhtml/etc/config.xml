@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+
+<config>
+  <modules>
+    <Magekart_Adminhtml>
+      <version>1.1.1</version>
+    </Magekart_Adminhtml>
+  </modules>
+    <admin>
+        <routers>
+            <magekart>
+                <use>admin</use>
+                <args>
+                    <module>Magekart_Adminhtml</module>
+                    <frontName>magekart</frontName>
+                </args>
+            </magekart>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <system>
+                <children>
+                    <magekart translate="title" module="magekart">
+                        <title>Get Support</title>
+                        <sort_order>11</sort_order>
+                        <action>adminhtml/system_config/edit/section/magekart</action>
+                    </magekart>
+                </children>
+            </system>
+        </menu>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <magekart translate="title" module="magekart">
+                                            <title>PrintX &gt; Extensions &amp; Support</title>
+                                            <children>
+                                                <extensions translate="title">
+                                                    <title>Extension Information</title>
+                                                    <sort_order>1</sort_order>
+                                                </extensions>
+                                                <support translate="title">
+                                                    <title>Get Support</title>
+                                                    <sort_order>2</sort_order>
+                                                </support>
+                                            </children>
+                                        </magekart>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <translate>
+            <modules>
+                <Magekart_Adminhtml>
+                    <files>
+                        <default>Magekart_Adminhtml.csv</default>
+                    </files>
+                </Magekart_Adminhtml>
+            </modules>
+        </translate>
+    </adminhtml>
+    <global>
+        <blocks>
+            <magekart>
+                <class>Magekart_Adminhtml_Block</class>
+            </magekart>
+            <adminhtml>
+                <rewrite>
+                    <system_config_edit>Magekart_Adminhtml_Block_System_Config_Edit</system_config_edit>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+        <models>
+            <magekart>
+                <class>Magekart_Adminhtml_Model</class>
+            </magekart>
+        </models>
+        <resources>
+            <magekart_setup>
+                <setup>
+                    <module>Magekart_Adminhtml</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </magekart_setup>
+            <magekart_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </magekart_write>
+            <magekart_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </magekart_read>
+        </resources>
+        <helpers>
+            <magekart>
+                <class>Magekart_Adminhtml_Helper</class>
+            </magekart>
+        </helpers>
+        <template>
+            <email>
+                <magekart_support_email_template>
+                    <label>PrintX Support</label>
+                    <file>printx_support.html</file>
+                    <type>text</type>
+                </magekart_support_email_template>
+            </email>
+        </template>
+    </global>
+	
+    <default>
+        <magekart>
+            <support>
+                <email>info@printxinc.com</email>
+                <name>PrintX Support</name>
+                <template>magekart_support_email_template</template>
+            </support>
+        </magekart>
+    </default>
+</config>

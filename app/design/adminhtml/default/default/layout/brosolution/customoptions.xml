@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<layout>
+    <printx_department_index>
+        <reference name="content">
+            <block type="brocustomoption/adminhtml_department" name="adminhtml.department.grid" />
+        </reference>
+    </printx_department_index>
+    
+    <printx_department_edit>
+        <reference name="content">
+            <block type="brocustomoption/adminhtml_department_edit" name="adminhtml.department.edit" />
+        </reference>
+    </printx_department_edit>
+    
+    <printx_department_new>
+        <reference name="content">
+            <block type="brocustomoption/adminhtml_department_edit" name="adminhtml.department.edit" />
+        </reference>
+    </printx_department_new>
+    
+    
+    <printx_uploadcenter_index>
+        <reference name="content">
+            <block type="brocustomoption/adminhtml_upload" name="adminhtml.upload.grid" />
+        </reference>
+    </printx_uploadcenter_index>
+    
+    <printx_uploadcenter_edit>
+        <reference name="content">
+            <block type="brocustomoption/adminhtml_upload_edit" name="adminhtml.upload.edit" />
+        </reference>
+    </printx_uploadcenter_edit>
+    
+    <printx_uploadcenter_new>
+        <reference name="content">
+            <block type="brocustomoption/adminhtml_upload_edit" name="adminhtml.upload.edit" />
+        </reference>
+    </printx_uploadcenter_new>
+    
+    <adminhtml_catalog_product_edit>    
+        <reference name="head">
+            <action method="addItem" ifconfig="magekart_catalog/customoptions/enabled"><type>js</type><name>brosolution/curve_prototype.js</name><params/><if/></action>
+            <action method="addItem" ifconfig="magekart_catalog/customoptions/enabled"><type>skin_css</type><name>css/brosolution/custom_option.css</name><params/><if/></action>
+        </reference>
+    </adminhtml_catalog_product_edit>
+    
+    <adminhtml_catalog_product_new>    
+        <reference name="head">
+            <action method="addItem" ifconfig="magekart_catalog/customoptions/enabled"><type>js</type><name>brosolution/curve_prototype.js</name><params/><if/></action>
+            <action method="addItem" ifconfig="magekart_catalog/customoptions/enabled"><type>skin_css</type><name>css/brosolution/custom_option.css</name><params/><if/></action>
+        </reference>
+    </adminhtml_catalog_product_new>    
+</layout>

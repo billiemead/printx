@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Magekart_CustomOptions>
+      <active>true</active>
+      <codePool>local</codePool>
+      <extension_name>PrintX Web-to-Print Pricing Options</extension_name>
+    </Magekart_CustomOptions>
+  </modules>
+</config>
